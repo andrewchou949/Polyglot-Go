@@ -1,0 +1,76 @@
+// Automatic FlutterFlow imports
+import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import 'index.dart'; // Imports other custom widgets
+import '/custom_code/actions/index.dart'; // Imports custom actions
+import '/flutter_flow/custom_functions.dart'; // Imports custom functions
+import 'package:flutter/material.dart';
+// Begin custom widget code
+// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+import 'package:flip_card/flip_card.dart';
+
+class FlashWidget extends StatefulWidget {
+  const FlashWidget({
+    Key? key,
+    this.width,
+    this.height,
+    this.frontText,
+    this.backText,
+  }) : super(key: key);
+
+  final double? width;
+  final double? height;
+  final String? frontText;
+  final String? backText;
+
+  @override
+  _FlashWidgetState createState() => _FlashWidgetState();
+}
+
+class _FlashWidgetState extends State<FlashWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0.0,
+      margin: EdgeInsets.only(left: 32.0, right: 32.0, top: 20.0, bottom: 0.0),
+      color: Color(0x00000000),
+      child: FlipCard(
+        direction: FlipDirection.HORIZONTAL,
+        side: CardSide.FRONT,
+        speed: 1000,
+        onFlipDone: (status) {
+          print(status);
+        },
+        front: Container(
+          decoration: BoxDecoration(
+            color: Color(0xFF006666),
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(widget.frontText ?? "",
+                  style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
+        ),
+        back: Container(
+          decoration: BoxDecoration(
+            color: Color(0xFF006666),
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(widget.backText ?? "",
+                  style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
