@@ -1,0 +1,348 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/form_field_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import 'update_goal_component_model.dart';
+export 'update_goal_component_model.dart';
+
+class UpdateGoalComponentWidget extends StatefulWidget {
+  const UpdateGoalComponentWidget({
+    Key? key,
+    required this.goal,
+  }) : super(key: key);
+
+  final GoalRecord? goal;
+
+  @override
+  _UpdateGoalComponentWidgetState createState() =>
+      _UpdateGoalComponentWidgetState();
+}
+
+class _UpdateGoalComponentWidgetState extends State<UpdateGoalComponentWidget> {
+  late UpdateGoalComponentModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => UpdateGoalComponentModel());
+
+    _model.languageTitleController ??=
+        TextEditingController(text: widget.goal?.title);
+    _model.languageTitleFocusNode ??= FocusNode();
+
+    _model.languageDescriptionController ??=
+        TextEditingController(text: widget.goal?.description);
+    _model.languageDescriptionFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
+    return Container(
+      width: double.infinity,
+      height: 500,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).secondaryBackground,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(0),
+          bottomRight: Radius.circular(0),
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: Form(
+        key: _model.formKey,
+        autovalidateMode: AutovalidateMode.disabled,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                  child: Container(
+                    width: 50,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE0E0E0),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                      child: Text(
+                        'Update Process',
+                        style: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .override(
+                              fontFamily: 'Outfit',
+                              fontSize: 24,
+                            ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'Archived',
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                  ),
+                  Switch.adaptive(
+                    value: _model.switchValue ??= widget.goal!.archived,
+                    onChanged: (newValue) async {
+                      setState(() => _model.switchValue = newValue!);
+                    },
+                    activeColor: Color(0xFF008080),
+                    activeTrackColor: Color(0xFFB6B9C8),
+                    inactiveTrackColor:
+                        FlutterFlowTheme.of(context).secondaryText,
+                    inactiveThumbColor:
+                        FlutterFlowTheme.of(context).secondaryText,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+              child: TextFormField(
+                controller: _model.languageTitleController,
+                focusNode: _model.languageTitleFocusNode,
+                obscureText: false,
+                decoration: InputDecoration(
+                  hintText: 'Enter your desire Language...',
+                  hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
+                        fontFamily: 'Plus Jakarta Sans',
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        fontWeight: FontWeight.w500,
+                      ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE0E0E0),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF008080),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(20, 32, 20, 12),
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      fontFamily: 'Outfit',
+                      fontWeight: FontWeight.w500,
+                    ),
+                validator: _model.languageTitleControllerValidator
+                    .asValidator(context),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+              child: TextFormField(
+                controller: _model.languageDescriptionController,
+                focusNode: _model.languageDescriptionFocusNode,
+                obscureText: false,
+                decoration: InputDecoration(
+                  hintText: 'Enter your type of learning...',
+                  hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
+                        fontFamily: 'Plus Jakarta Sans',
+                      ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFE0E0E0),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF008080),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: FlutterFlowTheme.of(context).error,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(20, 32, 20, 12),
+                ),
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      fontFamily: 'Outfit',
+                      fontWeight: FontWeight.w500,
+                    ),
+                maxLines: 4,
+                keyboardType: TextInputType.multiline,
+                validator: _model.languageDescriptionControllerValidator
+                    .asValidator(context),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+              child: FlutterFlowDropDown<String>(
+                controller: _model.goalStatusValueController ??=
+                    FormFieldController<String>(
+                  _model.goalStatusValue ??= widget.goal?.status,
+                ),
+                options: ['NOT STARTED', 'IN PROGRESS', 'COMPLETED'],
+                onChanged: (val) =>
+                    setState(() => _model.goalStatusValue = val),
+                width: double.infinity,
+                height: 50,
+                textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                      fontFamily: 'Outfit',
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                    ),
+                hintText: 'Please select...',
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: FlutterFlowTheme.of(context).secondaryText,
+                  size: 24,
+                ),
+                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                elevation: 2,
+                borderColor: FlutterFlowTheme.of(context).alternate,
+                borderWidth: 2,
+                borderRadius: 8,
+                margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+                hidesUnderline: true,
+                isSearchable: false,
+                isMultiSelect: false,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+              child: SliderTheme(
+                data: SliderThemeData(
+                  showValueIndicator: ShowValueIndicator.always,
+                ),
+                child: Slider(
+                  activeColor: Color(0xFF008080),
+                  inactiveColor: Color(0xFFE0E0E0),
+                  min: 0,
+                  max: 100,
+                  value: _model.languagueProgressValue ??=
+                      valueOrDefault<double>(
+                    widget.goal?.progress?.toDouble(),
+                    0.0,
+                  ),
+                  label: _model.languagueProgressValue.toString(),
+                  onChanged: (newValue) {
+                    newValue = double.parse(newValue.toStringAsFixed(0));
+                    setState(() => _model.languagueProgressValue = newValue);
+                  },
+                ),
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FFButtonWidget(
+                  onPressed: () async {
+                    if (_model.formKey.currentState == null ||
+                        !_model.formKey.currentState!.validate()) {
+                      return;
+                    }
+
+                    await widget.goal!.reference.update(createGoalRecordData(
+                      title: _model.languageTitleController.text,
+                      description: _model.languageDescriptionController.text,
+                      status: _model.goalStatusValue,
+                      progress: _model.languagueProgressValue!.round(),
+                      archived: _model.switchValue,
+                    ));
+                    Navigator.pop(context);
+                  },
+                  text: 'Update Process',
+                  options: FFButtonOptions(
+                    width: 270,
+                    height: 50,
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                    iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                    color: Color(0xFF008080),
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primaryBtnText,
+                          fontSize: 14,
+                        ),
+                    elevation: 3,
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
