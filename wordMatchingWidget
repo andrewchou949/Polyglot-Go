@@ -1,0 +1,371 @@
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_swipeable_stack.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:swipeable_card_stack/swipeable_card_stack.dart';
+
+import 'word_matching_model.dart';
+export 'word_matching_model.dart';
+
+class WordMatchingWidget extends StatefulWidget {
+  const WordMatchingWidget({
+    Key? key,
+    required this.languageRef,
+  }) : super(key: key);
+
+  final DocumentReference? languageRef;
+
+  @override
+  _WordMatchingWidgetState createState() => _WordMatchingWidgetState();
+}
+
+class _WordMatchingWidgetState extends State<WordMatchingWidget> {
+  late WordMatchingModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => WordMatchingModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.randomNumber = await actions.generateRandomNumber();
+    });
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
+    context.watch<FFAppState>();
+
+    return GestureDetector(
+      onTap: () => _model.unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+          : FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        appBar: AppBar(
+          backgroundColor: Color(0xFF008080),
+          automaticallyImplyLeading: false,
+          leading: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30,
+            borderWidth: 1,
+            buttonSize: 60,
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.black,
+              size: 30,
+            ),
+            onPressed: () async {
+              context.pushNamed(
+                'learningtype',
+                queryParameters: {
+                  'languageRef': serializeParam(
+                    widget.languageRef,
+                    ParamType.DocumentReference,
+                  ),
+                }.withoutNulls,
+              );
+
+              setState(() {
+                FFAppState().counter = 0;
+              });
+            },
+          ),
+          title: Text(
+            'Word Matching',
+            style: FlutterFlowTheme.of(context).headlineMedium.override(
+                  fontFamily: 'Outfit',
+                  color: Colors.white,
+                  fontSize: 22,
+                ),
+          ),
+          actions: [],
+          centerTitle: true,
+          elevation: 2,
+        ),
+        body: SafeArea(
+          top: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                child: StreamBuilder<List<WordmatchingRecord>>(
+                  stream: queryWordmatchingRecord(
+                    parent: widget.languageRef,
+                  ),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Color(0xFF008080),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    List<WordmatchingRecord> containerWordmatchingRecordList =
+                        snapshot.data!;
+                    return Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 4,
+                            color: Color(0x33000000),
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(0.00, 0.00),
+                            child: Text(
+                              containerWordmatchingRecordList[
+                                      FFAppState().counter]
+                                  .en,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 22,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder<List<WordmatchingRecord>>(
+                  stream: queryWordmatchingRecord(
+                    parent: widget.languageRef,
+                  ),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Color(0xFF008080),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    List<WordmatchingRecord>
+                        swipeableStackWordmatchingRecordList = snapshot.data!;
+                    return FlutterFlowSwipeableStack(
+                      topCardHeightFraction: 0.72,
+                      middleCardHeightFraction: 0.68,
+                      bottomCardHeightFraction: 0.75,
+                      topCardWidthFraction: 0.9,
+                      middleCardWidthFraction: 0.85,
+                      bottomCardWidthFraction: 0.8,
+                      onSwipeFn: (index) {},
+                      onLeftSwipe: (index) {},
+                      onRightSwipe: (index) async {
+                        final swipeableStackWordmatchingRecord =
+                            swipeableStackWordmatchingRecordList[index];
+                        if (swipeableStackWordmatchingRecordList[
+                                    FFAppState().counter]
+                                .foreign ==
+                            swipeableStackWordmatchingRecord.foreign) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'CORRECT',
+                                style: TextStyle(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                              ),
+                              duration: Duration(milliseconds: 1000),
+                              backgroundColor:
+                                  FlutterFlowTheme.of(context).secondary,
+                            ),
+                          );
+                          if (FFAppState().counter < 2) {
+                            setState(() {
+                              FFAppState().counter = FFAppState().counter + 1;
+                            });
+
+                            context.pushNamed(
+                              'WordMatching',
+                              queryParameters: {
+                                'languageRef': serializeParam(
+                                  widget.languageRef,
+                                  ParamType.DocumentReference,
+                                ),
+                              }.withoutNulls,
+                            );
+                          } else {
+                            setState(() {
+                              FFAppState().counter = 0;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'All words are matched!',
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                                duration: Duration(milliseconds: 1000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).secondary,
+                              ),
+                            );
+
+                            context.pushNamed(
+                              'learningtype',
+                              queryParameters: {
+                                'languageRef': serializeParam(
+                                  widget.languageRef,
+                                  ParamType.DocumentReference,
+                                ),
+                              }.withoutNulls,
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'WRONG',
+                                style: TextStyle(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                              ),
+                              duration: Duration(milliseconds: 1000),
+                              backgroundColor:
+                                  FlutterFlowTheme.of(context).secondary,
+                            ),
+                          );
+                        }
+                      },
+                      onUpSwipe: (index) {},
+                      onDownSwipe: (index) {},
+                      itemBuilder: (context, swipeableStackIndex) {
+                        final swipeableStackWordmatchingRecord =
+                            swipeableStackWordmatchingRecordList[
+                                swipeableStackIndex];
+                        return Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(16, 0, 16, 24),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 3,
+                                  color: Color(0x33000000),
+                                  offset: Offset(0, 1),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        12, 8, 12, 8),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Text(
+                                              swipeableStackWordmatchingRecord
+                                                  .foreign,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyLarge
+                                                  .override(
+                                                    fontFamily:
+                                                        'Plus Jakarta Sans',
+                                                    color: Color(0xFF14181B),
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: swipeableStackWordmatchingRecordList.length,
+                      controller: _model.swipeableStackController,
+                      enableSwipeUp: false,
+                      enableSwipeDown: false,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
