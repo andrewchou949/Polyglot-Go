@@ -34,7 +34,7 @@ class _TranslateWidget1State extends State<TranslateWidget1> {
   TextEditingController _textFieldController = TextEditingController();
   String scannedText = '';
   String translated = '';
-  final String apiKey = '';
+  final String apiKey = ''; // Put google api key here!
   final String baseUrl =
       'https://translation.googleapis.com/language/translate/v2';
 
