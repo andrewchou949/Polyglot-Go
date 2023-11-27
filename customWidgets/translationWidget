@@ -1,0 +1,119 @@
+// Automatic FlutterFlow imports
+import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import 'index.dart'; // Imports other custom widgets
+import '/custom_code/actions/index.dart'; // Imports custom actions
+import '/flutter_flow/custom_functions.dart'; // Imports custom functions
+import 'package:flutter/material.dart';
+// Begin custom widget code
+// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+// Working custoemr widget, but translation not working yet
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class TranslateWidget1 extends StatefulWidget {
+  const TranslateWidget1({
+    Key? key,
+    this.width,
+    this.height,
+    required this.languageCode,
+  }) : super(key: key);
+
+  final double? width;
+  final double? height;
+  final String languageCode;
+
+  @override
+  _TranslateWidget1State createState() => _TranslateWidget1State();
+}
+
+class _TranslateWidget1State extends State<TranslateWidget1> {
+  TextEditingController _textFieldController = TextEditingController();
+  String scannedText = '';
+  String translated = '';
+  final String apiKey = 'AIzaSyCDeuY1APHMC_ellFEMZCfNi_lAPTlVDE4';
+  final String baseUrl =
+      'https://translation.googleapis.com/language/translate/v2';
+
+  @override
+  void dispose() {
+    _textFieldController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleTextFieldChange(String value) async {
+    setState(() {
+      scannedText = value;
+    });
+
+    String targetLanguage = widget.languageCode;
+
+    String url =
+        '$baseUrl?key=$apiKey&q=${Uri.encodeQueryComponent(value)}&target=$targetLanguage';
+
+    try {
+      final response = await http.post(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        String translatedText =
+            data['data']['translations'][0]['translatedText'];
+        setState(() {
+          translated = translatedText;
+        });
+      } else {
+        // Handle error here
+        setState(() {
+          translated = 'Error: Unable to translate';
+        });
+      }
+    } catch (e) {
+      // Handle network or other errors here
+      setState(() {
+        translated = 'Error: $e';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _textFieldController,
+              onChanged:
+                  _handleTextFieldChange, // Update translation directly on text change
+              decoration: InputDecoration(
+                labelText: 'Enter Text',
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: Text(
+                    '$translated',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
