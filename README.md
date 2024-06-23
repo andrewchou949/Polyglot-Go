@@ -9,6 +9,10 @@ Polyglot-Go is a comprehensive project aimed at showcasing the integration of va
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
+- [Components](#components)
+- [Contributing](#contributing)
+
+
 
 ## Features
 - Custom Widgets
@@ -55,3 +59,18 @@ Polyglot-Go
 ├── pages                          # Directory for application pages
 │   └── ...                        # Page files
 ├── pubspec.yaml                   # Dart package configuration
+```
+
+### Components
+- **components/**: Contains various reusable components.
+- **customWidgets/**: Includes custom widget implementations.
+- **pages/**: Holds the different pages of the application.
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+1.	Fork the repository.
+2.	Create a new branch (git checkout -b feature/YourFeature).
+3.	Commit your changes (git commit -m 'Add some feature').
+4.	Push to the branch (git push origin feature/YourFeature).
+5.	Open a pull request.
