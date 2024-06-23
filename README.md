@@ -9,8 +9,6 @@ Polyglot-Go is a comprehensive project aimed at showcasing the integration of va
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 - Custom Widgets
